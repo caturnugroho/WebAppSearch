@@ -1,0 +1,116 @@
+﻿@using WebAppSearch.Models
+
+@model WebAppSearch.Models.HomeViewModel
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="row">
+    <div class="panel-heading">
+        <div class="col-md-8">
+            <h3>
+                <i class="fa fa-file-text-o"></i>
+                <span>CSV Search</span>
+            </h3>
+        </div>
+    </div>
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-md-6 col-md-push-2">
+        <section>
+            @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="well bs-component">
+                    <br />
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <span class="btn btn-default btn-file">
+                                            Browse&hellip;
+                                            @Html.TextBoxFor(m => m.FileAttach, new { type = "file", placeholder = Html.DisplayNameFor(m => m.FileAttach), @class = "form-control" })
+                                        </span>
+                                    </span>
+                                    <input type="text" class="form-control" readonly>
+                                </div>
+                                @Html.ValidationMessageFor(m => m.FileAttach, "", new { @class = "text-danger custom-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-5 col-md-10">
+                            <input type="submit" class="btn btn-danger" value="Upload" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 col-md-push-2">
+                        <div class="input-group">
+                        </div>
+                        @Html.TextBoxFor(m => m.Keyword, new { type = "text", placeholder = Html.DisplayFor(m => m.Keyword), @class = "form-control" })
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="submit">Search</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </section>
+    </div>
+</div>
+
+    @if (Model.results != null &&
+         Model.results.Count > 0)
+    {
+        <hr />
+
+        <div class="row">
+            <div class="col-md-offset-1 col-md-8">
+                <section>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th style="text-align: center;">ID</th>
+                                <th style="text-align: center;">Content</th>
+                                <th style="text-align: center;">Match Counts</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (contents item in Model.results)
+                            {
+                            <tr>
+                                <td style="text-align: center;">@item.id</td>
+                                <td style="text-align: center;">@item.content</td>
+                                <td style="text-align: center;">@item.counts</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </div>
+    }
+
+    @section Scripts
+{
+        @*Scripts*@
+        @Scripts.Render("~/bundles/bootstrap-file")
+
+        @*Styles*@
+        @Styles.Render("~/Content/Bootstrap-file/css")
+    }
